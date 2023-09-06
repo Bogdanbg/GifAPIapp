@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
+import com.example.gifapi.databinding.ItemGifBinding
 
-class GifAdapter(private val context: Context, private val gifList: List<GifModel>) :
+class GifAdapter(private val context: Context, private val gifList: MutableList<GifModel>) :
 RecyclerView.Adapter<GifAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_gif,parent,false)
-        return ViewHolder(view)
+        val binding = ItemGifBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -22,12 +23,20 @@ RecyclerView.Adapter<GifAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gif = gifList[position]
 
+        holder.binding.gifTitleTextView.text = gif.title
+
         Glide.with(context)
             .asGif()
             .load(gif.url)
-            .into(holder.itemView.gifImageView)
-        holder.itemView.gifTitleTextView.text = gif.title
+            .into(holder.binding.gifImageView)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    fun updateData(newData: List<GifModel>?) {
+        gifList.clear()
+        if (newData != null){
+            gifList.addAll(newData)
+        }
+    }
+
+    inner class ViewHolder(val binding: ItemGifBinding) : RecyclerView.ViewHolder(binding.root)
 }
