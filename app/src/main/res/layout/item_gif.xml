@@ -10,14 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />
-
-    <TextView
-        android:id="@+id/gifTitleTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+         />
 
 </LinearLayout>

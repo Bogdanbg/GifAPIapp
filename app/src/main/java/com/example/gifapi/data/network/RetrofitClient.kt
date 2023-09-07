@@ -1,4 +1,4 @@
-package com.example.gifapi
+package com.example.gifapi.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

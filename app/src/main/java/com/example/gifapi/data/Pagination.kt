@@ -1,4 +1,4 @@
-package com.example.gifapi
+package com.example.gifapi.data
 
 data class Pagination(
     val totalCount: Int,

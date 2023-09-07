@@ -1,4 +1,4 @@
-package com.example.gifapi
+package com.example.gifapi.domain
 
 import com.google.gson.annotations.SerializedName
 

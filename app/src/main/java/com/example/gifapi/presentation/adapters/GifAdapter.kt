@@ -1,13 +1,12 @@
-package com.example.gifapi
+package com.example.gifapi.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
 import com.example.gifapi.databinding.ItemGifBinding
+import com.example.gifapi.domain.GifModel
 
 class GifAdapter(private val context: Context, private val gifList: MutableList<GifModel>) :
 RecyclerView.Adapter<GifAdapter.ViewHolder>() {
@@ -22,13 +21,12 @@ RecyclerView.Adapter<GifAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gif = gifList[position]
-
-        holder.binding.gifTitleTextView.text = gif.title
+        val imageView = holder.binding.gifImageView
 
         Glide.with(context)
             .asGif()
             .load(gif.url)
-            .into(holder.binding.gifImageView)
+            .into(imageView)
     }
 
     fun updateData(newData: List<GifModel>?) {

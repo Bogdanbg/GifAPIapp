@@ -1,17 +1,20 @@
-package com.example.gifapi
+package com.example.gifapi.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.controls.ControlsProviderService.TAG
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gifapi.presentation.adapters.GifAdapter
+import com.example.gifapi.data.GifResponse
+import com.example.gifapi.R
+import com.example.gifapi.data.network.RetrofitClient
+import com.example.gifapi.data.network.GiphyApi
+import com.example.gifapi.domain.GifModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,17 +25,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //recyclerView and LayoutManager init
+
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        //adapter init and assigning it to recyclerView
+
         adapter = GifAdapter(this,gifsList)
         recyclerView.adapter = adapter
 
         fetchGifsFromServer()
-        // TODO: Try to change API request body 
-        // TODO: Also might be issue with recyclerView or adapter 
     }
 
     private fun fetchGifsFromServer() {

@@ -1,5 +1,6 @@
-package com.example.gifapi
+package com.example.gifapi.data.network
 
+import com.example.gifapi.data.GifResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

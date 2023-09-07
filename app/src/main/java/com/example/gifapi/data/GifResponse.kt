@@ -1,6 +1,6 @@
-package com.example.gifapi
+package com.example.gifapi.data
 
-import java.util.Date
+import com.example.gifapi.domain.GifModel
 
 data class GifResponse(
     val data: List<GifModel>,
