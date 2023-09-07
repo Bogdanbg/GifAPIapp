@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: GifAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
 
-        adapter = GifAdapter(this,gifsList)
+        adapter = GifAdapter()
         recyclerView.adapter = adapter
 
         fetchGifsFromServer()
@@ -38,12 +39,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchGifsFromServer() {
         val apiKey = "Q22n7OqnzmmMvOgr2E3pLLjLB6FA3pqM"
-        val limit = 10
+
 
         val retrofit = RetrofitClient.getInstance()
         val giphyApi = retrofit.create(GiphyApi::class.java)
 
-        val call = giphyApi.getTrendingGifs(apiKey,limit,0)
+        val call = giphyApi.getTrendingGifs(apiKey, GIF_LIMIT,0)
 
         call.enqueue(object : Callback<GifResponse>{
             override fun onResponse(call: Call<GifResponse>, response: Response<GifResponse>) {
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                     val gifResponse = response.body()
                     val gifs = gifResponse?.data
 
-                    adapter.updateData(gifs)
+                    gifs?.let { adapter.updateData(it) }
 
                     adapter.notifyDataSetChanged()
                 }else{
@@ -76,5 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         private const val TAG = "GifActivity"
+        private const val GIF_LIMIT = 10
+
     }
 }

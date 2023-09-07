@@ -1,5 +1,6 @@
 package com.example.gifapi.presentation.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import com.bumptech.glide.Glide
 import com.example.gifapi.databinding.ItemGifBinding
 import com.example.gifapi.domain.GifModel
 
-class GifAdapter(private val context: Context, private val gifList: MutableList<GifModel>) :
+class GifAdapter :
 RecyclerView.Adapter<GifAdapter.ViewHolder>() {
+
+    private val gifList = mutableListOf<GifModel>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemGifBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ViewHolder(binding)
@@ -20,21 +23,29 @@ RecyclerView.Adapter<GifAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val gif = gifList[position]
-        val imageView = holder.binding.gifImageView
-
-        Glide.with(context)
-            .asGif()
-            .load(gif.url)
-            .into(imageView)
+        holder.bind(gifList[position])
     }
 
-    fun updateData(newData: List<GifModel>?) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newData: List<GifModel>) {
         gifList.clear()
-        if (newData != null){
-            gifList.addAll(newData)
+        gifList.addAll(newData)
+        notifyDataSetChanged()
+    }
+
+
+    inner class ViewHolder(val binding: ItemGifBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(model: GifModel){
+            val splitList = model.url.split("-").last()
+            val realLink = "https://media1.giphy.com/media/$splitList/giphy.gif"
+            val imageView = binding.gifImageView
+
+            Glide.with(binding.root.context)
+                .asGif()
+                .fitCenter()
+                .load(realLink)
+                .into(imageView)
+
         }
     }
-
-    inner class ViewHolder(val binding: ItemGifBinding) : RecyclerView.ViewHolder(binding.root)
 }
