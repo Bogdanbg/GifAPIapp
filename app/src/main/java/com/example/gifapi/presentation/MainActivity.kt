@@ -3,20 +3,24 @@ package com.example.gifapi.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gifapi.GifFragment
+
 import com.example.gifapi.presentation.adapters.GifAdapter
 import com.example.gifapi.data.GifResponse
 import com.example.gifapi.R
 import com.example.gifapi.data.network.RetrofitClient
 import com.example.gifapi.data.network.GiphyApi
+import com.example.gifapi.databinding.ItemGifBinding
 import com.example.gifapi.domain.GifModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GifAdapter.OnItemClickListener {
 
     private val gifsList = mutableListOf<GifModel>()
     private lateinit var recyclerView: RecyclerView
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
 
-        adapter = GifAdapter()
+        adapter = GifAdapter(this)
         recyclerView.adapter = adapter
 
         fetchGifsFromServer()
@@ -69,6 +73,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun openFullScreenGifFragment(gifUrl: String){
+        val fragment = GifFragment()
+        val args = Bundle()
+        args.putString("gif_url",gifUrl)
+        fragment.arguments = args
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container,fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onGifItemClicked(gifUrl: String){
+        openFullScreenGifFragment(gifUrl)
+    }
     private fun showErrorToast(message: String) {
         runOnUiThread {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

@@ -1,7 +1,6 @@
 package com.example.gifapi.presentation.adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.gifapi.databinding.ItemGifBinding
 import com.example.gifapi.domain.GifModel
 
-class GifAdapter :
+class GifAdapter(private val onItemClickListener: OnItemClickListener) :
 RecyclerView.Adapter<GifAdapter.ViewHolder>() {
 
     private val gifList = mutableListOf<GifModel>()
@@ -20,6 +19,9 @@ RecyclerView.Adapter<GifAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return gifList.size
+    }
+    interface OnItemClickListener {
+        fun onGifItemClicked(gifUrl: String)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -46,6 +48,17 @@ RecyclerView.Adapter<GifAdapter.ViewHolder>() {
                 .load(realLink)
                 .into(imageView)
 
+        }
+
+        init {
+            itemView.setOnClickListener{
+                val splitList = gifList[position].url.split("-").last()
+                val realLink = "https://media1.giphy.com/media/$splitList/giphy.gif"
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION){
+                    onItemClickListener.onGifItemClicked(realLink)
+                }
+            }
         }
     }
 }
